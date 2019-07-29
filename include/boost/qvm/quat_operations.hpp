@@ -15,6 +15,7 @@
 #include <boost/qvm/error.hpp>
 #include <boost/qvm/throw_exception.hpp>
 #include <string>
+#include <type_traits>
 
 namespace
 boost
@@ -425,11 +426,8 @@ boost
             bool>::type
         operator==( A const & a, B const & b )
             {
-            return
-                quat_traits<A>::template read_element<0>(a)==quat_traits<B>::template read_element<0>(b) &&
-                quat_traits<A>::template read_element<1>(a)==quat_traits<B>::template read_element<1>(b) &&
-                quat_traits<A>::template read_element<2>(a)==quat_traits<B>::template read_element<2>(b) &&
-                quat_traits<A>::template read_element<3>(a)==quat_traits<B>::template read_element<3>(b);
+            std::equal_to<> f;
+            return cmp(a,b,f);
             }
 
         template <class A>
