@@ -33,6 +33,14 @@ boost
 
         template <int I,class V>
         BOOST_QVM_INLINE_TRIVIAL
+        typename enable_if_c<is_vec<V>::value>::type
+        set( V & v, typename vec_traits<V>::scalar_type const & a )
+            {
+            vec_traits<V>::template write_element<I>(v)=a;
+            }
+
+        template <int I,class V>
+        BOOST_QVM_INLINE_TRIVIAL
         typename enable_if_c<
             is_vec<V>::value,
             typename vec_traits<V>::scalar_type>::type
