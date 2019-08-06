@@ -17,6 +17,7 @@
 #include <boost/qvm/detail/transp_impl.hpp>
 #include <boost/qvm/scalar_traits.hpp>
 #include <string>
+#include <type_traits>
 
 namespace
 boost
@@ -528,11 +529,8 @@ boost
             bool>::type
         operator==( A const & a, B const & b )
             {
-            for( int i=0; i!=mat_traits<A>::rows; ++i )
-                for( int j=0; j!=mat_traits<A>::cols; ++j )
-                    if( mat_traits<A>::read_element_idx(i,j,a)!=mat_traits<B>::read_element_idx(i,j,b) )
-                        return false;
-            return true;
+            std::equal_to<> f;
+            return cmp(a,b,f);
             }
 
         ////////////////////////////////////////////////

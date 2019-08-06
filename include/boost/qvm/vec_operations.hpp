@@ -14,6 +14,7 @@
 #include <boost/qvm/assert.hpp>
 #include <boost/qvm/scalar_traits.hpp>
 #include <string>
+#include <type_traits>
 
 namespace
 boost
@@ -432,10 +433,8 @@ boost
             bool>::type
         operator==( A const & a, B const & b )
             {
-            for( int i=0; i!=vec_traits<A>::dim; ++i )
-                if( vec_traits<A>::read_element_idx(i,a)!=vec_traits<B>::read_element_idx(i,b) )
-                    return false;
-            return true;
+            std::equal_to<> f;
+            return cmp(a,b,f);
             }
 
         ////////////////////////////////////////////////
