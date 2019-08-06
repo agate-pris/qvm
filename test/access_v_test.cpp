@@ -54,6 +54,44 @@ void check_get()
     check_get_detail<0,D>::f(v,start,step);
     }
 
+template <int I,int Dim>
+struct check_set_detail
+    {
+    template <class V,class E,class D>
+    static void f( V & v, E & e, D & d )
+        {
+        boost::qvm::set<I>(v,d(e));
+        check_set_detail<I+1,Dim>::f(v,e,d);
+        }
+    template <class V,class E,class D>
+    static void g( V & v, E & e, D & d )
+        {
+        BOOST_TEST(boost::qvm::get<I>(v)==d(e));
+        check_set_detail<I+1,Dim>::g(v,e,d);
+        }
+    };
+
+template <int Dim>
+struct check_set_detail<Dim, Dim>
+    {
+    template <class V,class E,class D>
+    static void f( V &, E &, D & ) {}
+    template <class V,class E,class D>
+    static void g( V &, E &, D & ) {}
+    };
+
+template <class S, int D>
+void check_set()
+    {
+    boost::random::mt19937_64 e(0);
+    boost::random::uniform_real_distribution<S> d(100.0,200.0);
+    test_qvm::vector<V1, D, S> v;
+    check_set_detail<0,D>::f(v,e,d);
+    e.seed(0);
+    d.reset();
+    check_set_detail<0, D>::g(v,e,d);
+    }
+
 int
 main()
     {       
@@ -84,5 +122,15 @@ main()
     check_get<double,3>();
     check_get<double,4>();
     check_get<double,5>();
+    check_set<float,1>();
+    check_set<float,2>();
+    check_set<float,3>();
+    check_set<float,4>();
+    check_set<float,5>();
+    check_set<double,1>();
+    check_set<double,2>();
+    check_set<double,3>();
+    check_set<double,4>();
+    check_set<double,5>();
     return boost::report_errors();
     }
