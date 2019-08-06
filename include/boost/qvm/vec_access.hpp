@@ -24,6 +24,18 @@ boost
         typename enable_if_c<
             is_vec<V>::value,
             typename vec_traits<V>::scalar_type>::type
+        get( V const & v )
+            {
+            BOOST_STATIC_ASSERT(I>=0);
+            BOOST_STATIC_ASSERT(I<vec_traits<V>::dim);
+            return vec_traits<V>::template read_element<I>(v);
+            }
+
+        template <int I,class V>
+        BOOST_QVM_INLINE_TRIVIAL
+        typename enable_if_c<
+            is_vec<V>::value,
+            typename vec_traits<V>::scalar_type>::type
         A( V const & a )
             {
             BOOST_STATIC_ASSERT(I>=0);
